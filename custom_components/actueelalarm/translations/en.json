@@ -1,0 +1,48 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "P2000 near you",
+        "description": "Dutch emergency alerts (fire brigade, ambulance, trauma helicopter, KNRM lifeboats) around a point, from actueelalarm.nl.",
+        "data": {
+          "location": "Location",
+          "radius": "Radius",
+          "diensten": "Services"
+        }
+      }
+    },
+    "error": {
+      "outside_nl": "Pick a point in the Netherlands.",
+      "no_services": "Pick at least one service."
+    },
+    "abort": {
+      "already_configured": "This point and radius are already set up."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "laatste_melding": {
+        "name": "Latest alert"
+      }
+    }
+  },
+  "selector": {
+    "radius": {
+      "options": {
+        "1": "1 km",
+        "2": "2 km",
+        "5": "5 km",
+        "10": "10 km",
+        "25": "25 km"
+      }
+    },
+    "diensten": {
+      "options": {
+        "brw": "Fire brigade",
+        "amb": "Ambulance",
+        "mmt": "Trauma helicopter",
+        "knrm": "KNRM lifeboats"
+      }
+    }
+  }
+}

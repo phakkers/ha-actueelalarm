@@ -1,0 +1,48 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "P2000 in de buurt",
+        "description": "Meldingen van brandweer, ambulance, traumahelikopter en KNRM rond een punt, van actueelalarm.nl.",
+        "data": {
+          "location": "Locatie",
+          "radius": "Straal",
+          "diensten": "Diensten"
+        }
+      }
+    },
+    "error": {
+      "outside_nl": "Kies een punt in Nederland.",
+      "no_services": "Kies minstens één dienst."
+    },
+    "abort": {
+      "already_configured": "Dit punt met deze straal is al ingesteld."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "laatste_melding": {
+        "name": "Laatste melding"
+      }
+    }
+  },
+  "selector": {
+    "radius": {
+      "options": {
+        "1": "1 km",
+        "2": "2 km",
+        "5": "5 km",
+        "10": "10 km",
+        "25": "25 km"
+      }
+    },
+    "diensten": {
+      "options": {
+        "brw": "Brandweer",
+        "amb": "Ambulance",
+        "mmt": "Traumahelikopter",
+        "knrm": "KNRM"
+      }
+    }
+  }
+}
