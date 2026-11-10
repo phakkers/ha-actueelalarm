@@ -14,11 +14,44 @@ Huisnummers en namen staan nooit in de meldingen. De positie is het midden van d
 
 ## Installeren
 
-1. Ga in HACS naar **Integraties**, open het menu en kies **Aangepaste repositories**. Voeg `https://github.com/phakkers/ha-actueelalarm` toe als *Integration*.
-2. Installeer **actueelalarm P2000** en herstart Home Assistant.
-3. Ga naar **Instellingen → Apparaten en diensten → Integratie toevoegen → actueelalarm P2000**. Kies een punt (standaard je thuislocatie), een straal van 1 tot 25 km en de diensten.
+Je hebt Home Assistant nodig met **HACS** (de Home Assistant Community Store). Staat HACS nog niet in je zijbalk? Installeer het dan eerst met [de uitleg van HACS](https://hacs.xyz/docs/use/).
 
-Wil je meerdere punten volgen, bijvoorbeeld thuis en je werk? Voeg de integratie dan nog een keer toe.
+### Stap 1: download de integratie in HACS
+
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=phakkers&repository=ha-actueelalarm&category=integration)
+
+Klik op de knop hierboven. Je Home Assistant opent HACS op deze integratie. Klik rechtsonder op **Downloaden** en in het venster dat volgt nog een keer op **Downloaden**.
+
+Werkt de knop niet? Doe het dan met de hand:
+
+1. Open **HACS** in de zijbalk.
+2. Klik rechtsboven op de **drie puntjes (⋮)** en kies **Aangepaste repositories** (*Custom repositories*).
+3. Vul bij *Repository* in: `https://github.com/phakkers/ha-actueelalarm`. Kies bij *Type* **Integratie** (*Integration*) en klik op **Toevoegen**. Sluit daarna het venster.
+4. Zoek in HACS op **actueelalarm**, open **actueelalarm P2000** en klik rechtsonder op **Downloaden**.
+
+### Stap 2: herstart Home Assistant
+
+Ga naar **Instellingen → Systeem**, klik rechtsboven op het **aan/uit-icoon** en kies **Home Assistant opnieuw opstarten**. Pas na de herstart kent Home Assistant de integratie.
+
+### Stap 3: kies je punt
+
+[![Integratie toevoegen](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=actueelalarm)
+
+Klik op de knop hierboven. Met de hand gaat het zo: **Instellingen → Apparaten en diensten**, rechtsonder **Integratie toevoegen**, en zoek op **actueelalarm P2000**.
+
+Kies daarna:
+
+- een punt op de kaart (standaard je thuislocatie);
+- een straal van 1, 2, 5, 10 of 25 km;
+- welke diensten je wilt volgen.
+
+Klik op **Verzenden**. Je hebt nu een apparaat **P2000 binnen 5 km** (of de straal die je koos) met de sensor **Laatste melding**.
+
+Wil je meerdere punten volgen, bijvoorbeeld thuis en je werk? Herhaal dan stap 3.
+
+### Zonder HACS
+
+Download het zip-bestand van de [laatste release](https://github.com/phakkers/ha-actueelalarm/releases/latest) en pak het uit. Kopieer de map `custom_components/actueelalarm` naar de map `custom_components` in je Home Assistant-configuratie (de map met `configuration.yaml`; maak `custom_components` aan als die er nog niet is). Herstart daarna en ga verder met stap 3.
 
 ## Voorbeeld: melding op je telefoon
 
@@ -65,7 +98,10 @@ Dutch P2000 emergency alerts (fire brigade, ambulance, trauma helicopter, KNRM l
 
 - **Sensor "Latest alert"**: its attributes are service, priority, place, street, distance, time, link and position (it shows on the map).
 - **Event `actueelalarm_melding`** for every new alert, with the fields in the table above.
-- Install as a HACS custom repository (*Integration*), then add **actueelalarm P2000** under Devices & services. You pick a point (your home by default), a radius from 1 to 25 km and the services.
+- **Install:**
+  1. [Open this repository in HACS](https://my.home-assistant.io/redirect/hacs_repository/?owner=phakkers&repository=ha-actueelalarm&category=integration) and click **Download**. To do it by hand instead: HACS → ⋮ → *Custom repositories*, then add this repository's URL as type *Integration*.
+  2. Restart Home Assistant (Settings → System → power icon).
+  3. [Add the integration](https://my.home-assistant.io/redirect/config_flow_start/?domain=actueelalarm). Pick a point (your home by default), a radius from 1 to 25 km and the services.
 - The integration polls the open feed `https://actueelalarm.nl/api/meldingen.json` once a minute. It needs no API key.
 
 The data never includes house numbers or names. This is not an official alerting channel; in an emergency call 112.
