@@ -10,9 +10,23 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import dt as dt_util
 
 from . import Coordinator
 from .const import ATTRIBUTION, DOMAIN
+
+
+def _waar(m: dict[str, Any]) -> str:
+    return ", ".join(x for x in (m.get("straat"), m.get("plaats")) if x) or "Locatie niet vermeld"
+
+
+def _afstand(m: dict[str, Any]) -> str:
+    return f"{m['km']:.1f} km".replace(".", ",")
+
+
+def _tijd(m: dict[str, Any]) -> str:
+    t = dt_util.parse_datetime(m["t"])
+    return dt_util.as_local(t).strftime("%H:%M") if t else ""
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, add: AddEntitiesCallback) -> None:
@@ -26,6 +40,8 @@ class LaatsteMelding(CoordinatorEntity[Coordinator], SensorEntity):
     _attr_translation_key = "laatste_melding"
     _attr_icon = "mdi:alarm-light"
     _attr_attribution = ATTRIBUTION
+    # the list changes every minute; the recorder keeps the state, not ten meldingen per row
+    _unrecorded_attributes = frozenset({"meldingen"})
 
     def __init__(self, coordinator: Coordinator) -> None:
         super().__init__(coordinator)
@@ -45,13 +61,21 @@ class LaatsteMelding(CoordinatorEntity[Coordinator], SensorEntity):
 
     @property
     def native_value(self) -> str | None:
+        """What, where and how far, so the state alone says it: "Woningbrand · Kruisweg, Hoofddorp · 2,3 km"."""
         m = self._melding
-        return m["titel"][:255] if m else None
+        return f"{m['titel']} · {_waar(m)} · {_afstand(m)}"[:255] if m else None
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         m = self._melding
-        attrs: dict[str, Any] = {"aantal_laatste_2_uur": len(self.coordinator.data or [])}
+        attrs: dict[str, Any] = {
+            "aantal_laatste_2_uur": len(self.coordinator.data or []),
+            # the list the dashboard card (README) shows, each with its link; local time for display
+            "meldingen": [
+                {"tijd": _tijd(x), "titel": x["titel"], "waar": _waar(x), "afstand": _afstand(x), "dienst": x["dienst_naam"], "url": x["url"]}
+                for x in (self.coordinator.data or [])[:10]
+            ],
+        }
         if m:
             attrs |= {
                 "dienst": m["dienst_naam"],

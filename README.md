@@ -6,7 +6,8 @@ P2000-meldingen van brandweer, ambulance, traumahelikopter en KNRM rond je huis,
 
 ## Wat je krijgt
 
-- **Sensor "Laatste melding"**: de nieuwste melding binnen je straal. De attributen zijn dienst, prioriteit, plaats, straat, afstand, tijd en een link naar de melding. Met `latitude` en `longitude` staat de sensor op de kaart.
+- **Sensor "Laatste melding"**: de nieuwste melding binnen je straal, bijvoorbeeld "Woningbrand · Kruisweg, Hoofddorp · 2,3 km". Met `latitude` en `longitude` staat de sensor op de kaart. Het attribuut `meldingen` houdt de laatste tien bij, elk met een link.
+- **Een dashboardkaart** met die meldingen, klikbaar (zie hieronder).
 - **Event `actueelalarm_melding`** voor elke nieuwe melding, om automations op te starten.
 - De integratie vraagt elke minuut de [open feed](https://actueelalarm.nl/api/meldingen.json?lat=52.37&lon=4.89&km=5) op. Een API-sleutel is niet nodig.
 
@@ -56,6 +57,27 @@ Wil je meerdere punten volgen, bijvoorbeeld thuis en je werk? Herhaal dan stap 3
 ### Zonder HACS
 
 Download het zip-bestand van de [laatste release](https://github.com/phakkers/ha-actueelalarm/releases/latest) en pak het uit. Kopieer de map `custom_components/actueelalarm` naar de map `custom_components` in je Home Assistant-configuratie (de map met `configuration.yaml`; maak `custom_components` aan als die er nog niet is). Herstart daarna en ga verder met stap 3.
+
+## Op je dashboard: de laatste meldingen met link
+
+Ga naar je dashboard, klik rechtsboven op het **potlood** en dan op **Kaart toevoegen**. Kies onderaan **Handmatig** en plak dit:
+
+```yaml
+type: markdown
+title: P2000 in de buurt
+content: |
+  {%- set s = integration_entities('actueelalarm') | select('match', 'sensor') | list %}
+  {%- set m = state_attr(s[0], 'meldingen') if s else none %}
+  {%- if m %}
+  {%- for x in m %}
+  - **{{ x.tijd }}** [{{ x.titel }}]({{ x.url }}) · {{ x.waar }} · {{ x.afstand }}
+  {%- endfor %}
+  {%- else %}
+  Geen meldingen binnen je straal in de laatste 2 uur.
+  {%- endif %}
+```
+
+Je ziet dan de laatste tien meldingen met tijd, plaats en afstand. Klik op een melding voor de uitleg op actueelalarm.nl. Je hoeft niets in te vullen: de kaart vindt de sensor zelf.
 
 ## Voorbeeld: melding op je telefoon
 
