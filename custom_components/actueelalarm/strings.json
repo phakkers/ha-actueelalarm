@@ -44,5 +44,22 @@
         "knrm": "KNRM lifeboats"
       }
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Change point, radius or services",
+        "description": "The alerts restart with these settings straight away.",
+        "data": {
+          "location": "Location",
+          "radius": "Radius",
+          "diensten": "Services"
+        }
+      }
+    },
+    "error": {
+      "outside_nl": "Pick a point in the Netherlands.",
+      "no_services": "Pick at least one service."
+    }
   }
 }

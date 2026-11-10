@@ -44,5 +44,22 @@
         "knrm": "KNRM"
       }
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Punt, straal of diensten wijzigen",
+        "description": "De meldingen starten meteen opnieuw met deze instellingen.",
+        "data": {
+          "location": "Locatie",
+          "radius": "Straal",
+          "diensten": "Diensten"
+        }
+      }
+    },
+    "error": {
+      "outside_nl": "Kies een punt in Nederland.",
+      "no_services": "Kies minstens één dienst."
+    }
   }
 }

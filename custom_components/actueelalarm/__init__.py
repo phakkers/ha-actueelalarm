@@ -29,7 +29,7 @@ class Coordinator(DataUpdateCoordinator[list[dict[str, Any]]]):
         self.seen: set[str] | None = None
 
     async def _async_update_data(self) -> list[dict[str, Any]]:
-        d = self.entry.data
+        d = {**self.entry.data, **self.entry.options}  # options: changed later with Configure
         params = {
             "lat": f"{d[CONF_LATITUDE]:.4f}",
             "lon": f"{d[CONF_LONGITUDE]:.4f}",
@@ -58,7 +58,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_on_unload(entry.add_update_listener(_updated))
     return True
+
+
+async def _updated(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """New options (Configure): start again with the new point, radius and services."""
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

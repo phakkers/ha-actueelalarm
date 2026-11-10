@@ -47,6 +47,10 @@ Kies daarna:
 
 Klik op **Verzenden**. Je hebt nu een apparaat **P2000 binnen 5 km** (of de straal die je koos) met de sensor **Laatste melding**.
 
+### Straal, punt of diensten later wijzigen
+
+Ga naar **Instellingen → Apparaten en diensten** en open **actueelalarm P2000**. Klik bij je punt op **Configureren** (het tandwiel) en kies een andere straal, een ander punt of andere diensten. De meldingen starten meteen opnieuw met de nieuwe instellingen.
+
 Wil je meerdere punten volgen, bijvoorbeeld thuis en je werk? Herhaal dan stap 3.
 
 ### Zonder HACS
@@ -101,7 +105,7 @@ Dutch P2000 emergency alerts (fire brigade, ambulance, trauma helicopter, KNRM l
 - **Install:**
   1. [Open this repository in HACS](https://my.home-assistant.io/redirect/hacs_repository/?owner=phakkers&repository=ha-actueelalarm&category=integration) and click **Download**. To do it by hand instead: HACS → ⋮ → *Custom repositories*, then add this repository's URL as type *Integration*.
   2. Restart Home Assistant (Settings → System → power icon).
-  3. [Add the integration](https://my.home-assistant.io/redirect/config_flow_start/?domain=actueelalarm). Pick a point (your home by default), a radius from 1 to 25 km and the services.
+  3. [Add the integration](https://my.home-assistant.io/redirect/config_flow_start/?domain=actueelalarm). Pick a point (your home by default), a radius from 1 to 25 km and the services. To change them later, click **Configure** on the entry.
 - The integration polls the open feed `https://actueelalarm.nl/api/meldingen.json` once a minute. It needs no API key.
 
 The data never includes house numbers or names. This is not an official alerting channel; in an emergency call 112.
